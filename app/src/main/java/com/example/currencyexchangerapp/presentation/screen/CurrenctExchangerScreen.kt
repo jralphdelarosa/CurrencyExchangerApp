@@ -113,7 +113,7 @@ fun CurrencyExchangerScreen(
                     IconButton(
                         onClick = onSwapCurrencies,
                         modifier = Modifier
-                            .padding(horizontal = 4.dp)
+                            .padding(top = 20.dp, start = 5.dp, end = 5.dp)
                             .background(
                                 MaterialTheme.colorScheme.primary.copy(alpha = 0.1f),
                                 CircleShape
