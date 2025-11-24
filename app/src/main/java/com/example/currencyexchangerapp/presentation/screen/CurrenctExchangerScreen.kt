@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,9 +34,11 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
@@ -55,8 +58,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.window.PopupProperties
 import com.example.currencyexchangerapp.presentation.viewmodel.ExchangeUiState
 import com.example.currencyexchangerapp.presentation.model.BalanceUi
+import com.example.currencyexchangerapp.presentation.utils.currencyNames
 
 /**
  * Created by John Ralph Dela Rosa on 11/19/2025.
@@ -331,6 +336,7 @@ private fun CurrencyDropdown(
             fontWeight = FontWeight.Medium
         )
         Spacer(modifier = Modifier.height(4.dp))
+
         Box {
             OutlinedTextField(
                 value = selected,
@@ -359,21 +365,47 @@ private fun CurrencyDropdown(
 
             DropdownMenu(
                 expanded = expanded,
-                onDismissRequest = { expanded = false }
+                onDismissRequest = { expanded = false },
+                modifier = Modifier
+                    .fillMaxWidth(0.85f)
+                    .heightIn(max = 300.dp),
+                properties = PopupProperties(focusable = true)
             ) {
-                currencies.forEach { c ->
+                currencies.forEach { code ->
                     DropdownMenuItem(
                         text = {
-                            Text(
-                                c,
-                                color = MaterialTheme.colorScheme.onSurface
-                            )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = code,
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Text(
+                                    text = getCurrencyName(code),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
                         },
                         onClick = {
-                            onSelected(c)
+                            onSelected(code)
                             expanded = false
-                        }
+                        },
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        colors = MenuDefaults.itemColors(
+                            textColor = MaterialTheme.colorScheme.onSurface
+                        )
                     )
+                    if (code != currencies.last()) {
+                        HorizontalDivider(
+                            thickness = 0.5.dp,
+                            color = MaterialTheme.colorScheme.outlineVariant
+                        )
+                    }
                 }
             }
         }
@@ -440,6 +472,10 @@ private fun RatePreview(text: String?) {
             fontWeight = if (text != null) FontWeight.Medium else FontWeight.Normal
         )
     }
+}
+
+private fun getCurrencyName(code: String): String {
+    return currencyNames[code] ?: code
 }
 
 // --- MOCK / PREVIEWS ---

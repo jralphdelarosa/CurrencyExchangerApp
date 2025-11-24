@@ -1,4 +1,4 @@
-package com.example.currencyexchangerapp.ui
+package com.example.currencyexchangerapp.presentation
 
 import android.annotation.SuppressLint
 import android.os.Bundle

@@ -47,7 +47,7 @@ class ExchangeViewModel @Inject constructor(
                     rates.putAll(newRates)
 
                     // Update supported currencies from API
-                    val currencies = listOf("EUR") + newRates.keys.sorted()
+                    val currencies = newRates.keys.sorted()
                     _uiState.update {
                         it.copy(
                             supportedCurrencies = currencies,
